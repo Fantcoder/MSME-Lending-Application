@@ -37,6 +37,7 @@ const processDecision = (applicationId) => {
 
       if (!application) {
         console.error(`[DecisionEngine] Application ${applicationId} not found during processing`);
+        await ApplicationModel.updateStatus(applicationId, 'FAILED');
         return;
       }
 

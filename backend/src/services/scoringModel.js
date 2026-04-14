@@ -210,7 +210,11 @@ const evaluate = ({ emi, loanAmount, monthlyRevenue, tenureMonths, businessType 
     reasonCodes.push(decision === 'APPROVED' ? 'STRONG_PROFILE' : 'HIGH_EMI_BURDEN');
   }
 
-  return { decision, creditScore, reasonCodes };
+  return { 
+    decision, 
+    creditScore, 
+    reasonCodes: [...new Set(reasonCodes)]
+  };
 };
 
 module.exports = {

@@ -17,7 +17,7 @@ A lightweight, end-to-end lending decision system that accepts MSME business pro
 
 ```bash
 # 1. Clone the repository
-git clone <repo-url> && cd msme-lending
+git clone https://github.com/Fantcoder/MSME-Lending-Application && cd msme-lending
 
 # 2. Start all services (PostgreSQL, MongoDB, Backend, Frontend)
 docker-compose up --build

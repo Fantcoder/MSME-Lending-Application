@@ -44,11 +44,13 @@ const handleValidationErrors = (req, res, next) => {
 const validateBusinessProfile = [
   body('ownerName')
     .trim()
+    .notEmpty().withMessage('Owner name is required')
     .isLength({ min: 2, max: 100 })
     .withMessage('Owner name must be between 2 and 100 characters'),
 
   body('pan')
     .trim()
+    .notEmpty().withMessage('PAN is required')
     .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)
     .withMessage('PAN must match format: ABCDE1234F (5 letters, 4 digits, 1 letter)'),
 
@@ -85,6 +87,7 @@ const validateLoanApplication = [
 
   body('purpose')
     .trim()
+    .notEmpty().withMessage('Purpose is required')
     .isLength({ min: 10, max: 500 })
     .withMessage('Purpose must be between 10 and 500 characters'),
 
