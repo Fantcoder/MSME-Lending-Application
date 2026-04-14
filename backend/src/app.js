@@ -55,9 +55,15 @@ const PORT = parseInt(process.env.PORT, 10) || 4000;
 
 const start = async () => {
   try {
-    // Verify database connections before accepting traffic
+    // PostgreSQL is required — fail if unavailable
     await testConnection();
-    await connectMongo();
+
+    // MongoDB is best-effort — warn but don't crash if unavailable
+    try {
+      await connectMongo();
+    } catch (mongoErr) {
+      console.warn('[Server] MongoDB unavailable — audit logging disabled:', mongoErr.message);
+    }
 
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`[Server] MSME Lending API running on port ${PORT}`);

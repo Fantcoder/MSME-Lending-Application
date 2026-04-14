@@ -69,25 +69,29 @@ const processDecision = (applicationId) => {
       // Update loan application status
       await ApplicationModel.updateStatus(applicationId, decision);
 
-      // Write audit log to MongoDB
-      await AuditLog.create({
-        applicationId,
-        timestamp: new Date(),
-        inputSnapshot: {
-          ownerName: application.owner_name,
-          pan: application.pan,
-          businessType,
-          monthlyRevenue,
-          loanAmount,
-          tenureMonths,
-          purpose: application.purpose,
-          estimatedEmi: emi,
-        },
-        decision,
-        score: creditScore,
-        reasonCodes,
-        processingMs,
-      });
+      // Write audit log to MongoDB (best-effort — failure doesn't affect decision)
+      try {
+        await AuditLog.create({
+          applicationId,
+          timestamp: new Date(),
+          inputSnapshot: {
+            ownerName: application.owner_name,
+            pan: application.pan,
+            businessType,
+            monthlyRevenue,
+            loanAmount,
+            tenureMonths,
+            purpose: application.purpose,
+            estimatedEmi: emi,
+          },
+          decision,
+          score: creditScore,
+          reasonCodes,
+          processingMs,
+        });
+      } catch (auditErr) {
+        console.warn(`[DecisionEngine] Audit log failed for ${applicationId}:`, auditErr.message);
+      }
 
       console.log(
         `[DecisionEngine] Application ${applicationId}: ${decision} (score: ${creditScore}, ${processingMs}ms)`
