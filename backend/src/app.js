@@ -16,6 +16,9 @@ const decisionRoutes = require('./routes/decision');
 
 const app = express();
 
+// Trust the reverse proxy (Render) so rate limiting works accurately
+app.set('trust proxy', 1);
+
 // ─── Security & Parsing Middleware ───────────────────────────────────────────
 app.use(helmet());
 app.use(cors({
